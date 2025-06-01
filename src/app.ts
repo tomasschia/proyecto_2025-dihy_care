@@ -3,6 +3,7 @@ import cors from "cors";
 import https from "https";
 import fs from "fs";
 import dotenv from "dotenv";
+import router from "./rutes/item";
 
 dotenv.config();
 
@@ -26,7 +27,7 @@ serverApp.use((req, res, next) => {
 });
 
 /*
-// Middleware para verificar autenticación básica del api secret
+// Middleware para verificar autenticación del api secret
 serverApp.use("/api/v1", (req: Request, res: Response, next: NextFunction) => {
   const auth = req.headers.authorization;
 
@@ -47,19 +48,37 @@ serverApp.use("/api/v1", (req: Request, res: Response, next: NextFunction) => {
 */
 
 
+
+//levanto trearments
+serverApp.post("/api/v1/entries/treatments", (req: Request, res: Response) => {
+   console.log("Body recibido:", req.body);
+  console.log("[TREATMENTS]", req.body);
+  res.status(200).json({ status: "ok", tipo: "treatments", received: req.body });
+});
+
+//entries
 serverApp.post("/api/v1/entries", (req: Request, res: Response) => {
+  console.log("[ENTRIES]", req.body);
+  res.status(200).json({ status: "ok", tipo: "entries", received: req.body });
+});
+
+//status
+serverApp.post("/api/v1/entries/devicestatus", (req: Request, res: Response) => {
   const data = req.body;
+  console.log("Devicestatus recibido:", data);
+  res.json({ status: "ok", message: "Devicestatus procesado", received: data });
+}) 
 
-  console.log("Recibido en /api/v1/entries:", data);
-
-  // guardar en DB
-  res.status(200).json({ status: "ok", received: data });
+// Catch
+serverApp.post("/api/v1/*", (req: Request, res: Response) => {
+  console.log("[UNKNOWN PATH]", req.path, req.body);
+  res.status(200).json({ status: "ok", tipo: "unknown", path: req.path, received: req.body });
 });
 
 
 /*
 // Ruta que Xdrip va a usar para mandar datos
-serverApp.post("/api/v1/:endpoint", (req: Request, res: Response) => {
+serverApp.post("/api/v1/:endpoint", (req: Request, res: Response) => 
   const { endpoint } = req.params;
   const data = req.body;
 
@@ -68,7 +87,9 @@ serverApp.post("/api/v1/:endpoint", (req: Request, res: Response) => {
   //  guardar en db, reenviar, etc.
   res.json({ status: "ok", endpoint, received: data });
 });
-*/
+
+
+
 
 
 
