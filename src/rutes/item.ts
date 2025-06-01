@@ -1,3 +1,4 @@
+import { ok } from "assert";
 import { Router, Request, Response } from "express";
 
 const router = Router();
@@ -14,7 +15,14 @@ router.post('/entries', (req: Request, res: Response) => {
 //treatments
 router.post('/treatments', (req: Request, res: Response) => {
   const data = req.body;
+console.log("tratamientos recibidos", data);
+res.json({status: "ok", message : "tratamiento recibido" , received : data})
 
+
+
+
+
+/*
   if (!Array.isArray(data)) {
     return res.status(400).json({ error: "Se esperaba un array de tratamientos" });
   }
@@ -25,6 +33,10 @@ router.post('/treatments', (req: Request, res: Response) => {
   });
 
   res.json({ status: "ok", count: data.length });
+  */
+
+
+
 });
 
 //status

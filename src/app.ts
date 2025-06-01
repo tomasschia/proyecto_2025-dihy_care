@@ -4,6 +4,7 @@ import https from "https";
 import fs from "fs";
 import dotenv from "dotenv";
 import router from "./rutes/item";
+import swaggerUi from "swagger-ui-express";
 
 dotenv.config();
 
@@ -25,6 +26,10 @@ serverApp.use((req, res, next) => {
   console.log(`[${req.method}] ${req.url}`);
   next();
 });
+
+const swaggerDocument = JSON.parse(fs.readFileSync('./swagger.json', 'utf8'));
+
+serverApp.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 /*
 // Middleware para verificar autenticación del api secret
@@ -49,18 +54,19 @@ serverApp.use("/api/v1", (req: Request, res: Response, next: NextFunction) => {
 
 
 
-//levanto trearments
-serverApp.post("/api/v1/entries/treatments", (req: Request, res: Response) => {
-   console.log("Body recibido:", req.body);
-  console.log("[TREATMENTS]", req.body);
-  res.status(200).json({ status: "ok", tipo: "treatments", received: req.body });
-});
 
 //entries
 serverApp.post("/api/v1/entries", (req: Request, res: Response) => {
   console.log("[ENTRIES]", req.body);
   res.status(200).json({ status: "ok", tipo: "entries", received: req.body });
 });
+
+//levanto trearments
+serverApp.post("/api/v1/treatments", (req: Request, res: Response) => {
+  console.log("[TREATMENTS]", req.body);
+  res.status(200).json({ status: "ok", tipo: "treatments", received: req.body });
+});
+
 
 //status
 serverApp.post("/api/v1/entries/devicestatus", (req: Request, res: Response) => {
@@ -77,27 +83,13 @@ serverApp.post("/api/v1/*", (req: Request, res: Response) => {
 
 
 /*
-// Ruta que Xdrip va a usar para mandar datos
-serverApp.post("/api/v1/:endpoint", (req: Request, res: Response) => 
-  const { endpoint } = req.params;
-  const data = req.body;
-
-  console.log(` Recibido en /api/v1/${endpoint}:`, data);
-
-  //  guardar en db, reenviar, etc.
-  res.json({ status: "ok", endpoint, received: data });
-});
-
-
-
-
-
-
 // Leer certificados HTTPS (local)
 const httpsOptions = {
   key: fs.readFileSync("cert/key.pem"),
   cert: fs.readFileSync("cert/cert.pem"),
 };
+*/
+
 /*
 // Servidor HTTPS
 https.createServer(httpsOptions, serverApp).listen(PORT, () => {

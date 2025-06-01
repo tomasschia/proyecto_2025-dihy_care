@@ -1,0 +1,80 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API de DihyCare",
+    "version": "1.0.0",
+    "description": "API local para recibir datos desde xDrip"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3002"
+    }
+  ],
+  "paths": {
+    "/api/v1/entries": {
+      "post": {
+        "summary": "Recibir datos de entradas desde xDrip",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "example": {
+                  "type": "sgv",
+                  "sgv": 100,
+                  "date": 1623077420000
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Entrada recibida correctamente"
+          }
+        }
+      }
+    },
+    "/api/v1/treatments": {
+      "post": {
+        "summary": "Recibir tratamientos desde xDrip",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "eventType": {
+                      "type": "string"
+                    },
+                    "insulin": {
+                      "type": "number"
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  },
+                  "example": {
+                    "eventType": "Insulin Injection",
+                    "insulin": 4,
+                    "created_at": "2024-05-01T12:00:00Z"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Tratamientos recibidos correctamente"
+          }
+        }
+      }
+    }
+  }
+}
